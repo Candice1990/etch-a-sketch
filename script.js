@@ -1,44 +1,38 @@
-// function that builds a grid in the "container"
-
-function createGrid(x) {
-    for (var rows = 0; rows < x; rows++) {
-        for (var columns = 0; columns < x; columns++) {
-            $("#container").append("<div class='grid'></div>");
-        };
-
+//function for creating the rows and columns of a grid.
+function createGrid(number){
+  for(var i = 0, i < number, i++){
+    for(var i = 0, i < number, i++){
+      $("#container").append(<div class = "grid"></div>);
     };
-    $(".grid").width(960/x);
-    $(".grid").height(960/x);
-};
+  };
+  $(".grid").width(960/number);
+  $(".grid").height(960/number);
 
-// function that clears the grid
+//functon that clears grid for reset
 function clearGrid(){
-    $(".grid").remove();
+  $(".grid").remove();
 };
 
-// function that prompts the user to select the number of boxes in a new grid
-// the function then also creates that new grid
+//functions that prompts the user to input the size of grid.
 function refreshGrid(){
-    var z = prompt("How many boxes per side?");
-    clearGrid();
-    createGrid(z);
+  var ask = ("How many squares do you want on each side?");
+  clearGrid();
+  createGrid(ask);
 };
 
-// create a 16x16 grid when the page loads
-// creates a hover effect that changes the color of a square to black when the mouse passes over it, leaving a (pixel) trail through the grid
-// allows the click of a button to prompt the user to create a new grid
-$(document).ready(function() {
-    createGrid(16);
+/*creates a 16 by 16 grid where as the user's mouse hovers over a given
+square, the square darkens*/
+$(document).ready(){
+  createGrid(16)
+}
+$(".grid").mouseover(function(){
+  $(this).css("background-color","black");
+});
+$(".newGrid").click(function() {
+       refreshGrid();
 
-    $(".grid").mouseover(function() {
-        $(this).css("background-color", "black");
-        });
-
-    $(".newGrid").click(function() {
-        refreshGrid();
-
-        $(".grid").mouseover(function() {
-        $(this).css("background-color", "black");
-        });
-    });
+       $(".grid").mouseover(function() {
+       $(this).css("background-color", "black");
+       });
+   });
 });
