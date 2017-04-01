@@ -2,7 +2,7 @@
 function createGrid(number){
   for(var i = 0, i < number, i++){
     for(var i = 0, i < number, i++){
-      $("#container").append(<div class = "grid"></div>);
+      $("#container").append("<div class = "grid"></div>");
     };
   };
   $(".grid").width(960/number);
@@ -23,7 +23,7 @@ function refreshGrid(){
 /*creates a 16 by 16 grid where as the user's mouse hovers over a given
 square, the square darkens*/
 $(document).ready(){
-  createGrid(16)
+  createGrid(16);
 }
 $(".grid").mouseover(function(){
   $(this).css("background-color","black");
