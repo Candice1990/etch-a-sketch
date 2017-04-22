@@ -1,76 +1,136 @@
-//function for creating the rows and columns of a grid.
 
-function createGrid(x) {
-    for (var rows = 0; rows < x; rows++) {
-        for (var columns = 0; columns < x; columns++) {
-            $("#container").append("<div class='grid'></div>");
-        };
+var style = "default";
 
-    };
-    $(".grid").width(500/x);
-    $(".grid").height(500/x);
-};
+$(document).ready(function(){
+  createTable(50)
+  toggleStyle(colorDefault);
+  buttonClick(style);
+
+  $("#clear").click(function(){
+    $("td").removeAttr("style")
+    $("td").addClass("startGradient");
+  });
+
+  $("#new-pad").click(function(){
+    newSketchPad();
+  });
+
+  $("#rainbow").click(function(){
+    style = "rainbow"
+    buttonClick(style);
+    toggleStyle(rainbowColors);
+    });
+  $("#gradient").click(function(){
+    style = "gradient"
+    buttonClick(style);
+    $("td").addClass("startGradient");
+    toggleStyle(gradientBlack);
+  });
+  $("#default").click(function(){
+    style = "default"
+    buttonClick(style);
+    toggleStyle(colorDefault);
+  })
+//  $(".styles").click(function(){
+//    $(this).toggleClass('clicked')
+  //});
+});
 
 
-//functon that clears grid for reset
-function clearGrid(){
-  $(".grid").remove();
-};
-
-//functions that prompts the user to input the size of grid.
-function refreshGrid(){
-    var ask = prompt("How many boxes per side? (limit 50)");
-    if (ask < 51){
-      clearGrid();
-      createGrid(ask);
-    } if (ask === null){
-      clearGrid();
-      createGrid(25);
-    } else {
-      var newAsk = prompt("Choose between 0 and 50.")
-        if (newAsk < 51) {
-          clearGrid();
-          createGrid(newAsk);
-      } else {
-        alert("Goddamn it, what did I say?");
-      };
-
-    };
-
-};
-
-/* creates a function for each different colouring options
-function blackDefault(){
-  $(this).css("background-color": "black", "transition": "0.1s")
+//function for creating sketchpad size based on user input
+function createTable(userChoice) {
+  $(".wrapper").append("<table></table>");
+  for (var i = 0; i < userChoice; i++){
+    $("table").append("<tr ID='row" + i + "' ");
+    for (var j = 0; j < userChoice; j++) {
+      $("#row" + i).append("<td></td>");
+    }
+    $("table").append("</tr>");
+  }
 }
 
-function rainbowColors(){
-  var newColor = "#" + Math.floor(Math.random()*16777215).toString(16);
-        $(this).css({"background-color": newColor,
-                     "opacity": "1.0"});
-}; */
+//function for new sketchpad with different styles
+function newSketchPad(){
+  var input = prompt("Enter the size of the sketchpad (number of rows under 100)")
+  if (input < 1){
+    prompt("Enter a valid number please.");
+  } else if (input > 100) {
+    prompt("Please put a number less than 100.");
+  } else if (input === null){
+    return;
+  }
+  $("table").remove();
+//To prevent people from putting a wrong number
+    if(input < 1){
+    createTable(50);
+  } else if (input > 100){
+    createTable(50);
+  } else {
+    createTable(input)
+  }
+  if (style === "default") {
+    toggleStyle(colorDefault);
+  } else if (style === "rainbow") {
+    toggleStyle(rainbowColors);
+  } else if (style ==="startGradient"){
+    $("td").addClass("startGradient");
+    toggleStyle(gradientBlack);
+
+  }
+};
+
+//Clicking a style on or off
+
+function toggleStyle(style){
+  $("td").off("mouseenter");
+  $("td").on("mouseenter", style);
+  if (style === "colorDefault"){
+    style = "default";
+  } else if (style==="rainbowColors"){
+    style = "rainbow";
+  }
+
+};
+
+function colorDefault() {
+  $(this).css({"background-color": "black",
+              "opacity": "1.0"});
+}
+
+function rainbowColors() {
+  var newColor ="#"+ Math.floor(Math.random()*16777215).toString(16);
+
+  $(this).css({"background-color": newColor, "opacity":"1.0"})
+
+}
 
 
-/*creates a 16 by 16 grid where as the user's mouse hovers over a given
-square, the square darkens*/
-var style = "default";
-$(document).ready(function() {
-    createGrid(25);
 
-    $(".grid").mouseover(function() {
-        $(this).css("background-color", "black", "transition", "0.1s");
-        });
-
-    $(".newGrid").click(function() {
-        refreshGrid();
-
-        $(".grid").mouseover(function() {
-        $(this).css("background-color", "black", "transition", "0.1s");
-        });
-    });
-  /*  $("#rainbow").click(function(){
-      style = "rainbow";
-      toggleStyle("rainbowColors");
-
-    })*/
-});
+// When user mouses over a box, colors it to a darker shade of black
+// each time (10% increase in opacity each time the same box is hovered
+function gradientBlack() {
+    if (!$(this).hasClass("startGradient") &&
+        $(this).css("opacity") > 0) {
+            $(this).css("opacity", "+=0.1");
+        }
+    if ($(this).hasClass("startGradient")) {
+        $(this).css({"background-color": "black",
+                     "opacity": "0.1"});
+        $(this).removeClass("startGradient");
+        }
+}
+function buttonClick(style){
+  if (style === "default"){
+    $("#default").addClass("clicked");
+    $("#rainbow").removeClass("clicked");
+    $("#gradient").removeClass("clicked");
+  } else if (style ==="rainbow"){
+    $("#rainbow").addClass("clicked");
+    $("#default").removeClass("clicked");
+    $("#gradient").removeClass("clicked");
+  } else {
+    $("#gradient").addClass("clicked");
+    $("#rainbow").removeClass("clicked");
+    $("#default").removeClass("clicked");
+  }
+}
